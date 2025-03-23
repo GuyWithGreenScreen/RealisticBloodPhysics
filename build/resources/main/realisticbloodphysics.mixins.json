@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.gwgs.realisticbloodphysics.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "realisticbloodphysics.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

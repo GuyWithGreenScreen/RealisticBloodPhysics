@@ -1,0 +1,24 @@
+{
+  "blood": {
+    "subtitile": "Blood splash",
+    "sounds": [
+      "realisticbloodphysics:blood1",
+      "realisticbloodphysics:blood2",
+      "realisticbloodphysics:blood3"
+    ]
+  },
+  "bone_soft": {
+    "subtitile": "Bone crack",
+    "sounds": [
+      "realisticbloodphysics:bone1",
+      "realisticbloodphysics:bone2"
+    ]
+  },
+  "bone_hard": {
+    "subtitile": "Loud bone crack",
+    "sounds": [
+      "realisticbloodphysics:bone_hard",
+      "realisticbloodphysics:bone_hard2"
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+/particle realisticbloodphysics:blood_particle -28.50 82.13 -12.84
+/reload
+/time set day
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
