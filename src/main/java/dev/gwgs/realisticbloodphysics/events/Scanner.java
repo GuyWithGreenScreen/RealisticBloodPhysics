@@ -40,8 +40,8 @@ public class Scanner {
     @SubscribeEvent
     public static void mobBloodRegister(EntityEvent.EntityConstructing event) {
         if (!(event.getEntity() instanceof Player) && event.getEntity().getData(BloodPhysicsAttachments.BLOOD) == 0) {
-            event.getEntity().setData(BloodPhysicsAttachments.BLOOD, (int) (Tools.getVolumeFromBB(event.getEntity().getBoundingBox()) *1000));
-            System.out.println(event.getEntity().getName() + " 0 " + (int) (Tools.getVolumeFromBB(event.getEntity().getBoundingBox()) *1000));
+            event.getEntity().setData(BloodPhysicsAttachments.BLOOD, (int) (Tools.getVolumeFromBB(event.getEntity().getBoundingBox()) *5000));
+            System.out.println(event.getEntity().getName() + " 0 " + (int) (Tools.getVolumeFromBB(event.getEntity().getBoundingBox()) *5000));
         }
     }
 
@@ -49,15 +49,15 @@ public class Scanner {
     public static void mobTickEvent(EntityTickEvent.Pre event) {
         if (event.getEntity().hasData(BloodPhysicsAttachments.BLOOD_LOCATION)) {
             if (!event.getEntity().getData(BloodPhysicsAttachments.BLOOD_LOCATION).getBloodData().isEmpty()) {
-                HashMap<Vec3, Integer> tempMap = event.getEntity().getData(BloodPhysicsAttachments.BLOOD_LOCATION).getBloodData();
+                HashMap<BloodPhysicsAttachments.Vec4, Integer> tempMap = event.getEntity().getData(BloodPhysicsAttachments.BLOOD_LOCATION).getBloodData();
                 if (event.getEntity().getData(BloodPhysicsAttachments.BLOOD) <= 1) {
                     event.getEntity().kill();
                 }
-                for (Vec3 vec3 : tempMap.keySet()) {
+                for (BloodPhysicsAttachments.Vec4 vec3 : tempMap.keySet()) {
                     event.getEntity().setData(BloodPhysicsAttachments.BLOOD,
                             event.getEntity().getData(BloodPhysicsAttachments.BLOOD) - tempMap.get(vec3));
                     if (!event.getEntity().level().isClientSide()) {
-                        Vec3 newVec = vec3.add(event.getEntity().position());
+                        BloodPhysicsAttachments.Vec4 newVec = vec3.add(event.getEntity().position());
                         ((ServerLevel) event.getEntity().level()).sendParticles(BloodPhysicsParticles.BLOOD_PARTICLES.get(),
                                 newVec.x, newVec.y, newVec.z, tempMap.get(vec3), 0, 0, 0,
                                 Tools.random(-(((double) tempMap.get(vec3) /10)*3), -(((double) tempMap.get(vec3) /10)*3)));
@@ -93,16 +93,16 @@ public class Scanner {
             if (event.getEntity().getData(BloodPhysicsAttachments.BLOOD_LOCATION) != null) {
                 System.out.println(event.getEntity().getData(BloodPhysicsAttachments.BLOOD_LOCATION));
                 BloodPhysicsAttachments.BloodMap map = event.getEntity().getData(BloodPhysicsAttachments.BLOOD_LOCATION);
-                map.getBloodData().put(pos.subtract(event.getEntity().position()), sup.get());
+                map.getBloodData().put(Tools.vec3ToVec4(pos.subtract(event.getEntity().position()), event.getEntity().getYRot()), sup.get());
                 event.getEntity().setData(BloodPhysicsAttachments.BLOOD_LOCATION, map);
-                for (Vec3 vec : event.getEntity().getData(BloodPhysicsAttachments.BLOOD_LOCATION).getBloodData().keySet()) {
+                for (BloodPhysicsAttachments.Vec4 vec : event.getEntity().getData(BloodPhysicsAttachments.BLOOD_LOCATION).getBloodData().keySet()) {
                     System.out.println(vec + " - " + event.getEntity().getData(BloodPhysicsAttachments.BLOOD_LOCATION).getBloodData().get(vec));
                 }
             } else {
                 System.out.println("New");
-                HashMap<Vec3, Integer> tempMap = new HashMap<>();
-                BloodPhysicsAttachments.BloodMap map = new BloodPhysicsAttachments.BloodMap(tempMap);
-                map.getBloodData().put(pos.subtract(event.getEntity().position()), sup.get());
+                HashMap<BloodPhysicsAttachments.Vec4, Integer> tempMap = new HashMap<>();
+                BloodPhysicsAttachments.BloodMap map = new BloodPhysicsAttachments.BloodMap(tempMap, event.getEntity().getXRot(), 0);
+                map.getBloodData().put(Tools.vec3ToVec4(pos.subtract(event.getEntity().position()), event.getEntity().getYRot()), sup.get());
                 event.getEntity().setData(BloodPhysicsAttachments.BLOOD_LOCATION, map);
             }
             player.level().playSound(null, pos.x, pos.y, pos.z, BloodPhysicsSounds.BloodHit.get(), SoundSource.NEUTRAL);
